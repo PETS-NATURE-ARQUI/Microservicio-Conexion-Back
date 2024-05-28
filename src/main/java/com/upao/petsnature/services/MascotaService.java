@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface MascotaService {
 
-    public void agregarMascota(DatosRegistrarMascota datos);
+    void agregarMascota(DatosRegistrarMascota datos);
 
-    public String guardarImagen(MultipartFile imagen) throws IOException;
+    String guardarImagen(MultipartFile imagen) throws IOException;
 
-    public Mascota modificarMascota(Long mascotaId, DatosActualizarMascota datos);
+    Mascota modificarMascota(Long mascotaId, DatosActualizarMascota datos);
 
-    public List<Mascota> obtenerMascotasPorUsuario();
+    List<Mascota> obtenerMascotasPorUsuario();
 
-    public List<Mascota> obtenerMascotasPorRaza(Long razaId);
+    List<Mascota> obtenerMascotasPorRaza(Long razaId);
 }

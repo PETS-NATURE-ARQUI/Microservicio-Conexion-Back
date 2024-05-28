@@ -15,6 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class EmailReminderService {
+
+    private static final AtomicInteger index = new AtomicInteger(0);
+
     @Autowired
     private JavaMailSender mailSender;
 
@@ -25,7 +28,6 @@ public class EmailReminderService {
         List<Consejo> consejos = consejoRepository.findByRazaId(razaId);
         if (!consejos.isEmpty()) {
             // Enviar consejos en un ciclo, uno a uno por cada ejecución
-            AtomicInteger index = new AtomicInteger(0);
             int consejoIndex = index.getAndUpdate(i -> (i + 1) % consejos.size());
             Consejo consejo = consejos.get(consejoIndex);
 
@@ -45,5 +47,25 @@ public class EmailReminderService {
             }
         }
     }
+
+    // Método de prueba para enviar un correo de prueba
+    /*public void enviarCorreoDePrueba(String email) {
+        MimeMessage mensaje = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(mensaje, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+            helper.setTo(email);
+            helper.setSubject("Correo de prueba");
+
+            String contenido = "Este es un correo de prueba para verificar el envío de correos.";
+            helper.setText(contenido);
+
+            mailSender.send(mensaje);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            // Manejo de errores adicionales
+        }
+    }*/
+
 }
 

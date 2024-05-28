@@ -25,6 +25,11 @@ public class RazaServiceImpl implements RazaService {
     }
 
     @Override
+    public List<Raza> buscarRazasPorNombre(String nombre) {
+        return razaRepository.findByNombreContainingIgnoreCase(nombre);
+    }
+
+    @Override
     public Raza actualizarRaza(Long id, Raza raza) {
         Raza razaExistente = razaRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Raza no encontrada con ID: " + id));

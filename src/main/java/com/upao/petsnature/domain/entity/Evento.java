@@ -2,7 +2,6 @@ package com.upao.petsnature.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -19,13 +18,14 @@ public class Evento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "fecha_evento", columnDefinition = "DATE")
-    @CreationTimestamp
     private LocalDate fecha;
     private String veterinaria;
     private String descripcion;
     private String costo;
     @Enumerated(EnumType.STRING)
     private TipoEvento tipo;
+    @Lob
+    @Column(length = 10485760) // 10MB
     private String archivo; // word, pdf, excel, jpg, png
     private LocalDate modificadoFecha;
     @Column(nullable = false, name = "estado")
@@ -33,6 +33,12 @@ public class Evento {
     @ManyToOne(fetch = FetchType.LAZY)
     private Mascota mascota;
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Medicamento> medicamento;
+    private Set<Complemento> complemento;
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+        this.modificadoFecha = LocalDate.now(); // También actualiza la fecha de modificación
+    }
+
 
 }
