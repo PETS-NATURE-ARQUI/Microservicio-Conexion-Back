@@ -9,10 +9,17 @@ public record DatosRegistroEvento(
         String costo,
         String tipoEvento,
         String archivo,
-        Long mascotaId,
+        String nombreMascota,
+        String tipoMascota,
         String nombreComplemento,
         String descripcionComplemento,
-        String tipoMedicamento,
-        LocalDate fechaMedicamento
+        String tipoComplemento,
+        LocalDate fechaComplemento,
+        // Campos específicos para Vacuna
+        String fabricante,
+        String lote,
+        // Campos específicos para Medicamento
+        String dosis,
+        String frecuencia
 ) {
 }

@@ -15,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +42,7 @@ public class EventoServiceImpl implements EventoService {
         Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
 
-        Mascota mascota = mascotaRepository.findById(datos.mascotaId())
+        Mascota mascota = mascotaRepository.findByNombreAndRazaTipoMascotaNombre(datos.nombreMascota(), datos.tipoMascota())
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
 
         Evento evento = new Evento();
@@ -54,14 +56,28 @@ public class EventoServiceImpl implements EventoService {
 
         evento = eventoRepository.save(evento);
 
-
         if (datos.nombreComplemento() != null && !datos.nombreComplemento().isEmpty()) {
-            Complemento complemento = new Complemento();
+            Complemento complemento;
+            if ("VACUNA".equalsIgnoreCase(datos.tipoComplemento())) {
+                complemento = new Vacuna();
+                ((Vacuna) complemento).setFabricante(datos.fabricante());
+                ((Vacuna) complemento).setLote(datos.lote());
+            } else if ("MEDICAMENTO".equalsIgnoreCase(datos.tipoComplemento())) {
+                complemento = new Medicamento();
+                ((Medicamento) complemento).setDosis(datos.dosis());
+                ((Medicamento) complemento).setFrecuencia(datos.frecuencia());
+            } else {
+                throw new RuntimeException("Tipo de complemento no válido: " + datos.tipoComplemento());
+            }
             complemento.setNombre(datos.nombreComplemento());
             complemento.setDescripcion(datos.descripcionComplemento());
-            complemento.setTipo(TipoComplemento.valueOf(datos.tipoMedicamento()));
-            complemento.setFecha(datos.fechaMedicamento());
+            if (datos.fechaComplemento() != null) {
+                DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+                LocalDateTime fechaComplemento = LocalDateTime.parse(datos.fechaComplemento() + "T00:00:00", formatter);
+                complemento.setFecha(fechaComplemento.toLocalDate());
+            }
             complemento.setEvento(evento);
+
             complementoRepository.save(complemento);
         }
     }

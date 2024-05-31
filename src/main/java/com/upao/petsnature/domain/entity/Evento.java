@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity(name = "Evento")
@@ -33,7 +34,7 @@ public class Evento {
     @ManyToOne(fetch = FetchType.LAZY)
     private Mascota mascota;
     @OneToMany(mappedBy = "evento", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Complemento> complemento;
+    private Set<Complemento> complemento = new HashSet<>();
 
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;

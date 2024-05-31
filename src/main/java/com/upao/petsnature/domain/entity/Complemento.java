@@ -5,25 +5,22 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-@Entity(name = "Complemento")
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "complementos")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Complemento {
+public abstract class Complemento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "nombre_medicamento")
     private String nombre;
     private String descripcion;
-    @Column(name = "tipo", length = 50)
-    @Enumerated(EnumType.STRING)
-    private TipoComplemento tipo;
-    @Column(name = "fecha_medicamento", columnDefinition = "DATE", nullable = true)
-    private LocalDate fecha; // Fecha de aplicación de la vacuna
+    @Column(columnDefinition = "DATE", nullable = true)
+    private LocalDate fecha;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "evento_id")
     private Evento evento;
