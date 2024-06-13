@@ -2,7 +2,7 @@ package com.upao.petsnature.web.controller;
 
 import com.upao.petsnature.domain.dto.eventoDto.DatosDetallesEvento;
 import com.upao.petsnature.domain.dto.eventoDto.DatosRegistroEvento;
-import com.upao.petsnature.services.EventoService;
+import com.upao.petsnature.services.EventoProxyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +18,14 @@ import java.util.Map;
 @CrossOrigin("*")
 @RequiredArgsConstructor
 public class EventoController {
+
     @Autowired
-    private EventoService eventoService;
+    private EventoProxyService eventoProxyService;
 
     @PostMapping("/registrar")
     public ResponseEntity<?> registrarEvento(@RequestBody DatosRegistroEvento datos) {
         try {
-            eventoService.registrarEvento(datos);
+            eventoProxyService.registrarEvento(datos);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -34,7 +35,7 @@ public class EventoController {
     @GetMapping("/listar")
     public ResponseEntity<List<DatosDetallesEvento>> listarEventos() {
         try {
-            List<DatosDetallesEvento> eventos = eventoService.obtenerEventosPorUsuario();
+            List<DatosDetallesEvento> eventos = eventoProxyService.obtenerEventosPorUsuario();
             return ResponseEntity.ok(eventos);
         } catch (Exception e) {
             System.out.println("Error al listar los eventos: " + e.getMessage());
@@ -45,7 +46,7 @@ public class EventoController {
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<?> eliminarEvento(@PathVariable Long id) {
         try {
-            eventoService.eliminarEvento(id);
+            eventoProxyService.eliminarEvento(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -57,7 +58,7 @@ public class EventoController {
         try {
             String nuevaFechaStr = nuevaFechaMap.get("fecha");
             LocalDate nuevaFecha = LocalDate.parse(nuevaFechaStr);
-            eventoService.actualizarFechaEvento(eventoId, nuevaFecha);
+            eventoProxyService.actualizarFechaEvento(eventoId, nuevaFecha);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
