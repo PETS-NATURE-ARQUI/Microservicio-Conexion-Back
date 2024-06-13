@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -33,13 +35,13 @@ public class EventoController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<DatosDetallesEvento>> listarEventos() {
+    public ResponseEntity<List<DatosDetallesEvento>> listarEventos(@RequestParam String nombreMascota) {
         try {
-            List<DatosDetallesEvento> eventos = eventoProxyService.obtenerEventosPorUsuario();
+            List<DatosDetallesEvento> eventos = eventoProxyService.obtenerEventosPorMascota(nombreMascota);
             return ResponseEntity.ok(eventos);
         } catch (Exception e) {
             System.out.println("Error al listar los eventos: " + e.getMessage());
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(500).body(null);
         }
     }
 
@@ -63,5 +65,10 @@ public class EventoController {
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private String getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return (String) authentication.getPrincipal(); // El id del usuario es el principal
     }
 }
