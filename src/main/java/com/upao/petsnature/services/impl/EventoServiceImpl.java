@@ -94,7 +94,6 @@ public class EventoServiceImpl implements EventoService {
 
         return eventos.stream()
                 .map(evento -> new DatosDetallesEvento(
-                        evento.getId(),
                         evento.getFecha(),
                         evento.getVeterinaria(),
                         evento.getDescripcion(),

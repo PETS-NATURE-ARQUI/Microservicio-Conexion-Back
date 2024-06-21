@@ -25,9 +25,9 @@ public class EventoController {
     private EventoProxyService eventoProxyService;
 
     @PostMapping("/registrar")
-    public ResponseEntity<?> registrarEvento(@RequestBody DatosRegistroEvento datos) {
+    public ResponseEntity<?> registrarEvento(@RequestHeader(value = "Authorization") String authorization, @RequestBody DatosRegistroEvento datos) {
         try {
-            eventoProxyService.registrarEvento(datos);
+            eventoProxyService.registrarEvento(authorization, datos);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -35,9 +35,9 @@ public class EventoController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity<List<DatosDetallesEvento>> listarEventos(@RequestParam String nombreMascota) {
+    public ResponseEntity<List<DatosDetallesEvento>> listarEventos(@RequestHeader(value = "Authorization") String authorization, @RequestParam String nombreMascota) {
         try {
-            List<DatosDetallesEvento> eventos = eventoProxyService.obtenerEventosPorMascota(nombreMascota);
+            List<DatosDetallesEvento> eventos = eventoProxyService.obtenerEventosPorMascota(authorization, nombreMascota);
             return ResponseEntity.ok(eventos);
         } catch (Exception e) {
             System.out.println("Error al listar los eventos: " + e.getMessage());

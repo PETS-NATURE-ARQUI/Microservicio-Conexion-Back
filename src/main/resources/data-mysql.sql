@@ -126,7 +126,7 @@ INSERT IGNORE INTO razas (nombre, tipo_mascota_id) VALUES
 -- Insertar usuario admin
 
 -- Insertar consejos
-INSERT INTO Consejos (texto, edad, peso, alimentacion, raza_id) VALUES
+INSERT INTO consejos (texto, edad, peso, alimentacion, raza_id) VALUES
 -- Consejos para razas de Perro
 ('Los Shih Tzu son propensos a problemas en los ojos debido a su estructura facial, así que mantén sus ojos limpios y revisa cualquier signo de irritación.', 'Adulto', 4.5, 'Alimento de calidad para razas pequeñas', 1),
 ('Los Schnauzer pueden ser territoriales, así que socialízalos desde cachorros para evitar comportamientos agresivos.', 'Cachorro', 6.2, 'Alimento específico para su tamaño y edad', 2),

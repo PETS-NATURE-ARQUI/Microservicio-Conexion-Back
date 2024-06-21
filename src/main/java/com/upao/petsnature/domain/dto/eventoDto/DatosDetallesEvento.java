@@ -3,7 +3,6 @@ package com.upao.petsnature.domain.dto.eventoDto;
 import java.time.LocalDate;
 
 public record DatosDetallesEvento(
-    Long id,
     LocalDate fecha,
     String veterinaria,
     String descripcion,
