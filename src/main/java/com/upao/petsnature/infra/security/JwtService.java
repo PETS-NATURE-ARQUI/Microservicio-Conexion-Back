@@ -30,6 +30,7 @@ public class JwtService {
         claims.put("dni", usuario.getDni());
         claims.put("telefono", usuario.getTelefono());
         claims.put("correo", usuario.getCorreo());
+        claims.put("mascotas", usuario.getNombreMascotas());
 
         return generateToken(claims, user.getUsername());
     }

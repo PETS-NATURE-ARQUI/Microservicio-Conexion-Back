@@ -3,6 +3,7 @@ package com.upao.petsnature.services;
 import com.upao.petsnature.domain.dto.eventoDto.DatosRegistroEvento;
 import com.upao.petsnature.domain.dto.eventoDto.DatosDetallesEvento;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.Map;
 @Service
 public class EventoProxyService {
 
-    private static final String BASE_URL = "https://qxhb1qbbn2.execute-api.us-east-2.amazonaws.com/prod/evento";
+    private static final String BASE_URL = "https://1i7i2df4ye.execute-api.us-east-2.amazonaws.com/prod/evento";
 
     @Autowired
     private WebClient.Builder webClientBuilder;
@@ -28,7 +29,6 @@ public class EventoProxyService {
         return token;
     }
 
-
     public void registrarEvento(String authorization, DatosRegistroEvento datos) {
         webClientBuilder.build()
                 .post()
@@ -39,7 +39,6 @@ public class EventoProxyService {
                 .bodyToMono(Void.class)
                 .block();
     }
-
 
     public List<DatosDetallesEvento> obtenerEventosPorMascota(String authorization, String nombreMascota) {
         String uri = BASE_URL + "?nombreMascota=" + nombreMascota;
@@ -53,20 +52,21 @@ public class EventoProxyService {
                 .block();
     }
 
-    public void eliminarEvento(Long eventoId) {
+    public void eliminarEvento(String authorization, String mascotaNombre) {
         webClientBuilder.build()
-                .delete()
-                .uri(BASE_URL + "/{id}", eventoId)
-                .header("Authorization", "Bearer " + getJwtToken())
+                .method(HttpMethod.DELETE)
+                .uri(BASE_URL)
+                .header("Authorization", authorization)
+                .body(Mono.just(Map.of("mascotaNombre", mascotaNombre)), Map.class)
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();
     }
 
-    public void actualizarFechaEvento(Long eventoId, LocalDate nuevaFecha) {
+    public void actualizarFechaEvento(String eventoId, LocalDate nuevaFecha) {
         webClientBuilder.build()
                 .put()
-                .uri(BASE_URL + "/{id}", eventoId)
+                .uri(BASE_URL + "/" + eventoId)
                 .header("Authorization", "Bearer " + getJwtToken())
                 .body(Mono.just(Map.of("fecha", nuevaFecha.toString())), Map.class)
                 .retrieve()

@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -30,7 +28,7 @@ public class EventoController {
             eventoProxyService.registrarEvento(authorization, datos);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -41,34 +39,30 @@ public class EventoController {
             return ResponseEntity.ok(eventos);
         } catch (Exception e) {
             System.out.println("Error al listar los eventos: " + e.getMessage());
-            return ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
 
-    @DeleteMapping("/eliminar/{id}")
-    public ResponseEntity<?> eliminarEvento(@PathVariable Long id) {
+    @DeleteMapping("/eliminar/{mascotaNombre}")
+    public ResponseEntity<?> eliminarEvento(@RequestHeader(value = "Authorization") String authorization, @PathVariable String mascotaNombre) {
         try {
-            eventoProxyService.eliminarEvento(id);
+            eventoProxyService.eliminarEvento(authorization, mascotaNombre);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/actualizar-fecha/{eventoId}")
-    public ResponseEntity<?> actualizarFechaEvento(@PathVariable Long eventoId, @RequestBody Map<String, String> nuevaFechaMap) {
+    public ResponseEntity<?> actualizarFechaEvento(@PathVariable String eventoId, @RequestBody Map<String, String> nuevaFechaMap) {
         try {
             String nuevaFechaStr = nuevaFechaMap.get("fecha");
             LocalDate nuevaFecha = LocalDate.parse(nuevaFechaStr);
             eventoProxyService.actualizarFechaEvento(eventoId, nuevaFecha);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    private String getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (String) authentication.getPrincipal(); // El id del usuario es el principal
-    }
 }

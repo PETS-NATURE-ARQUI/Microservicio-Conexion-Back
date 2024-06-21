@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity(name = "Usuario")
 @Table(name = "usuarios", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
@@ -97,6 +98,10 @@ public class Usuario implements UserDetails {
     @Override
     public boolean isEnabled() {
         return this.enabled;
+    }
+
+    public List<String> getNombreMascotas() {
+        return mascota.stream().map(Mascota::getNombre).collect(Collectors.toList());
     }
 
 }
