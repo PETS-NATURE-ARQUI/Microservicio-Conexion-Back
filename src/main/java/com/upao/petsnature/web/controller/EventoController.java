@@ -58,13 +58,20 @@ public class EventoController {
         }
     }
 
-    @PutMapping("/actualizar-fecha/{eventoId}")
-    public ResponseEntity<?> actualizarFechaEvento(@PathVariable String eventoId, @RequestBody Map<String, String> nuevaFechaMap) {
+    @PutMapping("/actualizar-fecha")
+    public ResponseEntity<?> actualizarFechaEvento(@RequestHeader(value = "Authorization") String authorization, @RequestBody Map<String, String> requestBody) {
+        String eventoId = requestBody.get("eventoId");
+        String nuevaFechaStr = requestBody.get("nuevaFecha");
+
+        if (eventoId == null || nuevaFechaStr == null) {
+            return new ResponseEntity<>("eventoId y nuevaFecha son requeridos", HttpStatus.BAD_REQUEST);
+        }
+
+        LocalDate nuevaFecha = LocalDate.parse(nuevaFechaStr);
+
         try {
-            String nuevaFechaStr = nuevaFechaMap.get("fecha");
-            LocalDate nuevaFecha = LocalDate.parse(nuevaFechaStr);
-            eventoProxyService.actualizarFechaEvento(eventoId, nuevaFecha);
-            return ResponseEntity.ok().build();
+            eventoProxyService.actualizarFechaEvento(authorization, eventoId, nuevaFecha);
+            return ResponseEntity.ok().body(Map.of("message", "Fecha de evento actualizada exitosamente"));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

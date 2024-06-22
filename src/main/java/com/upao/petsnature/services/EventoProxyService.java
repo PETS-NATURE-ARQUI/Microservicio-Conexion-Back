@@ -4,8 +4,6 @@ import com.upao.petsnature.domain.dto.eventoDto.DatosRegistroEvento;
 import com.upao.petsnature.domain.dto.eventoDto.DatosDetallesEvento;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -17,17 +15,10 @@ import java.util.Map;
 @Service
 public class EventoProxyService {
 
-    private static final String BASE_URL = "https://6x8859v112.execute-api.us-east-2.amazonaws.com/prod/evento";
+    private static final String BASE_URL = "https://lpj7wahiki.execute-api.us-east-2.amazonaws.com/prod/evento";
 
     @Autowired
     private WebClient.Builder webClientBuilder;
-
-    private String getJwtToken() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = (String) authentication.getCredentials();
-        System.out.println("JWT Token: " + token);
-        return token;
-    }
 
     public void registrarEvento(String authorization, DatosRegistroEvento datos) {
         webClientBuilder.build()
@@ -63,12 +54,12 @@ public class EventoProxyService {
                 .block();
     }
 
-    public void actualizarFechaEvento(String eventoId, LocalDate nuevaFecha) {
+    public void actualizarFechaEvento(String authorization, String eventoId, LocalDate nuevaFecha) {
         webClientBuilder.build()
                 .put()
-                .uri(BASE_URL + "/" + eventoId)
-                .header("Authorization", "Bearer " + getJwtToken())
-                .body(Mono.just(Map.of("fecha", nuevaFecha.toString())), Map.class)
+                .uri(BASE_URL)
+                .header("Authorization", authorization)
+                .body(Mono.just(Map.of("eventoId", eventoId, "nuevaFecha", nuevaFecha.toString())), Map.class)
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();
