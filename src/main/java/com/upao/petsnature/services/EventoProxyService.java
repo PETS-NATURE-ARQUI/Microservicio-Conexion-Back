@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class EventoProxyService {
 
-    private static final String BASE_URL = "https://1i7i2df4ye.execute-api.us-east-2.amazonaws.com/prod/evento";
+    private static final String BASE_URL = "https://6x8859v112.execute-api.us-east-2.amazonaws.com/prod/evento";
 
     @Autowired
     private WebClient.Builder webClientBuilder;
@@ -52,12 +52,12 @@ public class EventoProxyService {
                 .block();
     }
 
-    public void eliminarEvento(String authorization, String mascotaNombre) {
+    public void eliminarEvento(String authorization, String eventoId) {
         webClientBuilder.build()
                 .method(HttpMethod.DELETE)
                 .uri(BASE_URL)
                 .header("Authorization", authorization)
-                .body(Mono.just(Map.of("mascotaNombre", mascotaNombre)), Map.class)
+                .body(Mono.just(Map.of("eventoId", eventoId)), Map.class)
                 .retrieve()
                 .bodyToMono(Void.class)
                 .block();

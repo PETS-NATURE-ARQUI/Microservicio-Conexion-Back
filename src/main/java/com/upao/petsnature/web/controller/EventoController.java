@@ -43,11 +43,16 @@ public class EventoController {
         }
     }
 
-    @DeleteMapping("/eliminar/{mascotaNombre}")
-    public ResponseEntity<?> eliminarEvento(@RequestHeader(value = "Authorization") String authorization, @PathVariable String mascotaNombre) {
+    @DeleteMapping("/eliminar")
+    public ResponseEntity<?> eliminarEvento(@RequestHeader(value = "Authorization") String authorization, @RequestBody Map<String, String> requestBody) {
+        String eventoId = requestBody.get("eventoId");
+        if (eventoId == null || eventoId.isEmpty()) {
+            return new ResponseEntity<>("eventoId es requerido", HttpStatus.BAD_REQUEST);
+        }
+
         try {
-            eventoProxyService.eliminarEvento(authorization, mascotaNombre);
-            return ResponseEntity.ok().build();
+            eventoProxyService.eliminarEvento(authorization, eventoId);
+            return ResponseEntity.ok().body(Map.of("message", "Evento eliminado exitosamente"));
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
