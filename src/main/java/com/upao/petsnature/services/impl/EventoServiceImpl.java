@@ -82,7 +82,7 @@ public class EventoServiceImpl implements EventoService {
         }
     }
 
-    @Override
+    /*@Override
     public List<DatosDetallesEvento> obtenerEventosPorUsuario() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) authentication.getPrincipal();
@@ -104,7 +104,7 @@ public class EventoServiceImpl implements EventoService {
                         evento.getComplemento().stream().findFirst().map(Complemento::getNombre).orElse(null)
                 ))
                 .collect(Collectors.toList());
-    }
+    }*/
 
     @Override
     public void eliminarEvento(Long eventoId) {

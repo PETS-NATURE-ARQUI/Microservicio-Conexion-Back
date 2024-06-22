@@ -10,7 +10,7 @@ public interface EventoService {
 
     void registrarEvento(DatosRegistroEvento datos);
 
-    List<DatosDetallesEvento> obtenerEventosPorUsuario();
+    /*List<DatosDetallesEvento> obtenerEventosPorUsuario();*/
 
     void eliminarEvento(Long eventoId);
 
