@@ -1,5 +1,6 @@
 package com.upao.petsnature.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.upao.petsnature.domain.dto.mascotaDto.DatosActualizarMascota;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,6 +37,7 @@ public class Mascota {
     private Usuario usuario;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "raza_id")
+    @JsonBackReference
     private Raza raza;
     @OneToMany(mappedBy = "mascota", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Evento> evento = new HashSet<>();

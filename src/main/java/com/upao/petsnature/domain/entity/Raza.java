@@ -1,7 +1,8 @@
 package com.upao.petsnature.domain.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.;
+import lombok.;
 
 import java.util.Set;
 
@@ -18,6 +19,7 @@ public class Raza {
     private Long id;
     private String nombre;
     @OneToMany(mappedBy = "raza", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonBackReference
     private Set<Mascota> mascota;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo_mascota_id")
