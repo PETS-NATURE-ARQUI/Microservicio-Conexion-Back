@@ -48,7 +48,7 @@ public class Usuario implements UserDetails {
     @Column(nullable = false, name = "estado")
     private boolean enabled = true;
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Mascota> mascota;
+    private Set<Mascota> mascota = new HashSet<>();
 
     public boolean puedeAgregarMascota(){
         return mascota.size() < 10;

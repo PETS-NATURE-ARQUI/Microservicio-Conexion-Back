@@ -37,7 +37,7 @@ public class Mascota {
     @JoinColumn(name = "raza_id")
     private Raza raza;
     @OneToMany(mappedBy = "mascota", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Evento> evento;
+    private Set<Evento> evento = new HashSet<>();
 
     public void actualizarMascota(DatosActualizarMascota datosActualizarMascota){
         if (datosActualizarMascota.nombreMascota() != null && !datosActualizarMascota.nombreMascota().isBlank()){
