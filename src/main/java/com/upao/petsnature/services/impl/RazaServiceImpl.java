@@ -26,7 +26,7 @@ public class RazaServiceImpl implements RazaService {
 
     @Override
     public List<Raza> buscarRazasPorNombre(String nombre) {
-        return razaRepository.findByNombreContainingIgnoreCase(nombre);
+        return razaRepository.buscarRazasPorNombre(nombre);
     }
 
     @Override
