@@ -36,7 +36,11 @@ jobs:
             -H "Accept: application/json" \
             -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
             -H "Content-Type: application/json" \
-            -d '{"serviceId": "${{ secrets.RENDER_SERVICE_ID }}", "clearCache": false}' \
+            -d '{
+                  "serviceId": "${{ secrets.RENDER_SERVICE_ID }}",
+                  "envVars": {
+                    "EVENTO_BASE_URL": "${{ secrets.EVENTO_BASE_URL }}"
+                  },
+                  "clearCache": false
+                }' \
             https://api.render.com/deploy
-        env:
-          EVENTO_BASE_URL: ${{ secrets.EVENTO_BASE_URL }}
