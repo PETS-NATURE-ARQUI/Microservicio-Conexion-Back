@@ -1,24 +1,32 @@
-# Usar una imagen base de OpenJDK
-FROM openjdk:17-jdk-alpine
+# Usa una imagen base de Maven para construir la aplicación
+FROM maven:3.8.4-openjdk-17 AS build
 
-# Establecer el directorio de trabajo
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copiar el archivo pom.xml y el código fuente al contenedor
-COPY pom.xml /app/
-COPY src /app/src/
+# Copia el archivo pom.xml y las dependencias
+COPY pom.xml .
 
-# Instalar Maven
-RUN apk add --no-cache maven
+# Descarga las dependencias del proyecto
+RUN mvn dependency:go-offline
 
-# Construir el proyecto
-RUN mvn -f /app/pom.xml clean package -DskipTests
+# Copia el código fuente
+COPY src ./src
 
-# Copiar el archivo JAR generado al contenedor
-COPY target/petsnature-0.0.1-SNAPSHOT.jar app.jar
+# Compila el proyecto y empaca en un JAR
+RUN mvn clean package -DskipTests
 
-# Exponer el puerto 8080
+# Usa una imagen base más ligera para ejecutar la aplicación
+FROM openjdk:17-jdk-alpine
+
+# Establece el directorio de trabajo
+WORKDIR /app
+
+# Copia el JAR desde la etapa de construcción
+COPY --from=build /app/target/petsnature-0.0.1-SNAPSHOT.jar app.jar
+
+# Expone el puerto 8080
 EXPOSE 8080
 
-# Ejecutar la aplicación
+# Comando para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
