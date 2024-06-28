@@ -15,7 +15,7 @@ import java.util.Map;
 @Service
 public class EventoProxyService {
 
-    private static final String BASE_URL = "https://9hhzzz8vc5.execute-api.us-east-2.amazonaws.com/prod/evento";
+    private static final String BASE_URL = "https://luldry3ym4.execute-api.us-east-2.amazonaws.com/prod/evento";
 
     @Autowired
     private WebClient.Builder webClientBuilder;
