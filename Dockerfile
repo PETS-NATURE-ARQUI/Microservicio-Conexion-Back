@@ -1,10 +1,14 @@
-
+# Usar una imagen base de OpenJDK
 FROM openjdk:17-jdk-alpine
 
+# Establecer el directorio de trabajo en el contenedor
 WORKDIR /app
 
-COPY target/mi-aplicacion-0.0.1-SNAPSHOT.jar /app/mi-aplicacion.jar
+# Copiar el archivo JAR del directorio target al contenedor
+COPY target/petsnature-0.0.1-SNAPSHOT.jar app.jar
 
+# Exponer el puerto 8080
 EXPOSE 8080
 
-ENTRYPOINT ["java", "-jar", "/app/mi-aplicacion.jar"]
+# Comando para ejecutar la aplicación
+ENTRYPOINT ["java", "-jar", "app.jar"]
