@@ -1,8 +1,8 @@
 package com.upao.petsnature.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import jakarta.persistence.;
-import lombok.;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.Set;
 
